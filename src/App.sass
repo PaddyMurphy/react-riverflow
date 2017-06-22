@@ -2,36 +2,36 @@
 @import '../node_modules/bulma/sass/utilities/initial-variables'
 // import custom variables
 @import 'bulma-styles.sass'
-// Import the rest of Bulma
-@import '../node_modules/bulma/bulma'
+
+// override bulma
+.App
+  .columns
+    flex-wrap: wrap
+
+  .column-search
+    flex: 1
+    min-width: 200px
+    .field
+      justify-content: flex-start
+    label
+      margin: 0 0.5rem
+    .control
+      width: 100%
+
+  .column-button
+    flex: 0
+    justify-content: flex-end
+
+  .delete
+    position: absolute
+    top: 0.6em
+    right: 0.6rem
+    &.is-small
+      min-height: 16px
+      min-width: 16px
 
 .tools
   margin-bottom: 1rem
 
-.columns
-  flex-wrap: wrap
-
-.column-search
-  flex: 1
-  min-width: 200px
-  .field
-    justify-content: flex-start
-  label
-    margin: 0 0.5rem
-  .control
-    width: 100%
-
-.column-button
-  flex: 0
-  justify-content: flex-end
-
 .refresh-short
   font-weight: bold
-
-.delete
-  position: absolute
-  top: 0.6em
-  right: 0.6rem
-  &.is-small
-    min-height: 16px
-    min-width: 16px

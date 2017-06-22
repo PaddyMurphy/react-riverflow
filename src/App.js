@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Navbar from './components/Navbar/Navbar';
+import Footer from './components/Footer/Footer';
 import Gridtable from './components/Gridtable/Gridtable';
 import './App.sass';
 
@@ -49,6 +50,9 @@ class App extends Component {
             </div>
           </section>
         </div> {/* END rivertable */}
+
+        <Footer />
+
       </div>
     );
   }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Classnames from 'classnames'
+import Graph from '../Graph/Graph'
 import './Gridrow.sass';
 
 class Gridrow extends Component {
@@ -75,14 +76,19 @@ class Gridrow extends Component {
               <div className="column column-condition is-one-quarter">
                 <div className="content">
                   <p className="sitecode">
-                    <a className="button site-link" href="{data.location}" target="blank">USGS site {data.site} location</a>
+                    <a className="button site-link" href={data.location} target="blank">USGS site {data.site} location</a>
                   </p>
                   <p>{data.condition}</p>
                   <p className="small">NOTE: The rising / falling arrows compare the current value to the value 12 hours ago. The river may already be on the way down</p>
                 </div>
               </div>
               <div className="column column-graph is-three-quarters">
-                {/* graph here */}
+                <Graph
+                  endDate={this.endDate}
+                  startDate={this.startDate}
+                  selected={this.state.selected}
+                  graphType={this.props.graphType}
+                />
               </div>
             </div>
           </td>
