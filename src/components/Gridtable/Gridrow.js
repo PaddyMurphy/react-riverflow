@@ -1,43 +1,81 @@
 import React, { Component } from 'react';
+import Classnames from 'classnames'
 import './Gridrow.sass';
 
 class Gridrow extends Component {
 
-  // constructor(props) {
-  //   super(props);
-  // }
+  constructor(props) {
+    super(props);
+    /*
+      tableData: Object
+      loading: Boolean
+      graphType: String
+    */
+
+    this.state = {
+      selected: undefined
+    }
+
+    // this.sortOrders = sortOrderItems;
+    this.startDate = undefined;
+    this.endDate = new Date().toISOString().split('T')[0];
+    this.sortKey = 'name';
+
+    // This binding is necessary to make `this` work in the callback
+    this.selectRiver = this.selectRiver.bind(this);
+  }
 
   render() {
-    console.log(this.props);
+    const data = this.props.tableData;
+
+    let trClasses = Classnames(
+      data.level, {
+      'is-selected': (this.state.selected === data.site) ? 'is-selected' : ''
+      }
+    )
+
+    let detailClasses = Classnames(
+      'row-details', {
+      'show-row': (this.state.selected === data.site) ? 'show-row' : ''
+      }
+    )
+
+    let svgArrowClasses = Classnames(
+      {
+        'arrow-up': data.rising,
+        'arrow-down': !data.rising,
+        'is-rising-fast': data.risingFast
+      }
+    )
+
     return (
       <tbody>
-        <tr>
-          <th>{this.props.tableData.name}</th>
+        <tr className={trClasses} onClick={this.selectRiver} data-selected={data.site}>
+          <th>{data.name}</th>
           <td>
-            {this.props.tableData.cfs}
-
+            {data.cfs}
             <svg
               viewBox="0 0 27 30"
-              className="arrow-up is-rising-fast"
+              className={svgArrowClasses}
             >
               <use xlinkHref="#arrow-flow" />
             </svg>
           </td>
-          <td className="wwclass">{this.props.tableData.class}</td>
+          <td className="wwclass">{data.class}</td>
           <td>
-            <span className="date">{this.props.tableData.date}</span>
-            <span className="time">{this.props.tableData.time}</span>
+            <span className="date">{data.date}</span>
+            <span className="time">{data.time}</span>
           </td>
         </tr>
-        <tr className="row-details">
+        <tr className={detailClasses}>
           <td colSpan="5">
             <div className="row-details-wrapper columns">
               <div className="column column-condition is-one-quarter">
                 <div className="content">
                   <p className="sitecode">
-                    <a className="button site-link" href="{this.props.tableData.location}" target="blank">USGS site {this.props.tableData.site} location</a>
+                    <a className="button site-link" href="{data.location}" target="blank">USGS site {data.site} location</a>
                   </p>
-                  <p>{this.props.tableData.condition}</p>
+                  <p>{data.condition}</p>
                   <p className="small">NOTE: The rising / falling arrows compare the current value to the value 12 hours ago. The river may already be on the way down</p>
                 </div>
               </div>
@@ -49,6 +87,24 @@ class Gridrow extends Component {
         </tr>
       </tbody>
     );
+  }
+
+  sortBy(key) {
+    this.resetTable();
+    this.sortKey = key
+    this.sortOrders[key] = this.sortOrders[key] * -1
+  }
+
+  selectRiver(e) {
+    const target = e.currentTarget;
+
+    // deselect if clicking the active row
+    if (target.classList.contains('is-selected')) {
+      this.setState({selected: undefined});
+    } else {
+      // set selected
+      this.setState({selected: target.dataset.selected});
+    }
   }
 }
 

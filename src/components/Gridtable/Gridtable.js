@@ -18,7 +18,6 @@ class Gridtable extends Component {
     this.state = {
       error: false,
       loading: false,
-      selected: undefined,
       showLegend: true,
       searchQuery: '',
       tableData: undefined
@@ -29,12 +28,7 @@ class Gridtable extends Component {
     this.graphType = '00060'; // defaults to cfs
     this.rivers = Rivers.data;
     this.sites = this.formatSites();
-
-    this.endDate = new Date().toISOString().split('T')[0];
-    this.sortKey = 'name';
     this.riversFormatted = [];
-    // this.sortOrders = sortOrderItems;
-    this.startDate = undefined;
   }
 
   render() {
@@ -45,7 +39,6 @@ class Gridtable extends Component {
 
     if(data) {
       data.forEach(function (row) {
-        // console.log(row);
         rows.push(<Gridrow
           key={row.site}
           tableData={row}
