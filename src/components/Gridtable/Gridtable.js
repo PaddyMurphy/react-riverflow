@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import Classnames from 'classnames'
+import Axios from 'axios';
 import Gridrow from './Gridrow';
 import Rivers from '../../rivers.json';
 import Conditions from '../../conditions.json';
@@ -16,7 +17,7 @@ class Gridtable extends Component {
     // })
 
     this.state = {
-      error: false,
+      error: undefined,
       loading: false,
       showLegend: true,
       searchQuery: '',
@@ -36,6 +37,12 @@ class Gridtable extends Component {
     const vm = this;
     let rows = [];
     let data = this.state.tableData;
+
+    let loadingClasses = Classnames(
+      'loading notification is-warning', {
+      'is-hidden': this.state.loading ? false : true
+      }
+    )
 
     if(data) {
       data.forEach(function (row) {
@@ -59,7 +66,7 @@ class Gridtable extends Component {
           </symbol>
         </svg>
 
-        <div className="loading notification is-warning is-hidden">Loading river information...</div>
+        <div className={loadingClasses}>Loading river information...</div>
 
         <table className="table">
           <thead>
@@ -113,9 +120,9 @@ class Gridtable extends Component {
     var vm = this;
 
     vm.riversFormatted = [];
-    vm.setState.loading = true;
+    vm.setState({loading: true});
     // fetch all site numbers in rivers.json
-    axios.get(this.baseUsgsUrl, {
+    Axios.get(this.baseUsgsUrl, {
       params: {
         parameterCd: this.graphType,
         sites: this.sites,
@@ -125,18 +132,18 @@ class Gridtable extends Component {
       }
     })
     .then(response => {
-      vm.loading = false;
+      vm.setState({loading: false});
       if (response.data.value.timeSeries) {
         vm.displayUsgsData(response.data.value.timeSeries);
-        vm.setState.error = undefined;
+        vm.setState({error: ''});
       } else {
-        vm.setState.error = 'no river data available';
+        vm.setState({error: 'no river data available'});
       }
     })
     .catch(error => {
       console.log(error);
-      vm.setState.loading = false;
-      vm.setState.error = error.message;
+      vm.setState({loading: false});
+      vm.setState({error: error.message});
     });
   }
 

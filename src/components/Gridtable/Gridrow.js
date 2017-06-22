@@ -30,13 +30,13 @@ class Gridrow extends Component {
 
     let trClasses = Classnames(
       data.level, {
-      'is-selected': (this.state.selected === data.site) ? 'is-selected' : ''
+      'is-selected': (this.state.selected === data.site) ? true : false
       }
     )
 
     let detailClasses = Classnames(
       'row-details', {
-      'show-row': (this.state.selected === data.site) ? 'show-row' : ''
+      'show-row': (this.state.selected === data.site) ? true : false
       }
     )
 
@@ -50,6 +50,7 @@ class Gridrow extends Component {
 
     return (
       <tbody>
+
         <tr className={trClasses} onClick={this.selectRiver} data-selected={data.site}>
           <th>{data.name}</th>
           <td>
@@ -67,6 +68,7 @@ class Gridrow extends Component {
             <span className="time">{data.time}</span>
           </td>
         </tr>
+
         <tr className={detailClasses}>
           <td colSpan="5">
             <div className="row-details-wrapper columns">
@@ -85,6 +87,7 @@ class Gridrow extends Component {
             </div>
           </td>
         </tr>
+
       </tbody>
     );
   }
