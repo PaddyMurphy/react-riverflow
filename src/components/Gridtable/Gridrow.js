@@ -21,9 +21,6 @@ class Gridrow extends Component {
     this.startDate = undefined;
     this.endDate = new Date().toISOString().split('T')[0];
     this.sortKey = 'name';
-
-    // This binding is necessary to make `this` work in the callback
-    this.selectRiver = this.selectRiver.bind(this);
   }
 
   render() {
@@ -103,7 +100,8 @@ class Gridrow extends Component {
     this.sortOrders[key] = this.sortOrders[key] * -1
   }
 
-  selectRiver(e) {
+  // binds this
+  selectRiver = (e) => {
     const target = e.currentTarget;
 
     // deselect if clicking the active row

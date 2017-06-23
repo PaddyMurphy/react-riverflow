@@ -3,6 +3,15 @@ import './Tools.css';
 
 class Tools extends Component {
 
+  // constructor(props) {
+  //   super(props);
+  // }
+
+  // bind this
+  handleClick = () => {
+    console.log('this is:', this);
+  }
+
   render() {
     return (
       <div className="Tools">
@@ -21,14 +30,14 @@ class Tools extends Component {
             <div className="field level-item">
               <label htmlFor="search" className="label">Search</label>
               <p className="control">
-                <input id="search" name="search" className="input" type="text" placeholder="Filter the table" />
+                <input disabled id="search" name="search" className="input" type="text" placeholder="Filter the table" />
                 <a className="delete is-small"> </a>
               </p>
             </div>
           </div>
 
           <div className="column column-button">
-            <button className="button is-primary">
+            <button disabled className="button is-primary" onClick={this.handleClick}>
               <span className="refresh-long is-hidden-mobile">refresh river table</span>
               <span className="refresh-short is-hidden-tablet">&#8634;</span>
             </button>
