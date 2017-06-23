@@ -4,7 +4,7 @@ import Axios from 'axios';
 import Gridrow from './Gridrow';
 import Rivers from '../../rivers.json';
 import Conditions from '../../conditions.json';
-import './Gridtable.sass';
+import './Gridtable.css';
 
 class Gridtable extends Component {
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Classnames from 'classnames'
-import './Graph.sass';
+import './Graph.css';
 
 class Graph extends Component {
 

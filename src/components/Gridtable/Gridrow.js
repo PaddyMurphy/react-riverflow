@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Classnames from 'classnames'
 import Graph from '../Graph/Graph'
-import './Gridrow.sass';
+import './Gridrow.css';
 
 class Gridrow extends Component {
 
