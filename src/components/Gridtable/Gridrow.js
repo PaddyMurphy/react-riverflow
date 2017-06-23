@@ -55,7 +55,7 @@ class Gridrow extends Component {
         <tr className={trClasses} onClick={this.selectRiver} data-selected={data.site}>
           <th>{data.name}</th>
           <td>
-            {data.cfs}
+            <span className="cfs-value">{data.cfs}</span>
             <svg
               viewBox="0 0 27 30"
               className={svgArrowClasses}

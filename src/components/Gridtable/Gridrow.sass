@@ -57,11 +57,11 @@
 
 .arrow-up
   fill: darken($green, 8%)
-  transform: translate(4px, 2px)
+  transform: translateY(2px)
 
 .arrow-down
   fill: darken($red, 8%)
-  transform: scale(-1) translate(-4px, -2px)
+  transform: scale(-1) translateY(-2px)
 
 .is-rising-fast
   animation: pulse 1.3s linear infinite;
@@ -78,10 +78,6 @@
 // table sorting sort arrows
 th.active .arrow
   opacity: 1
-
-.cfs
-  min-width: 4.5rem
-  text-transform: uppercase
 
 .arrow
   display: inline-block
@@ -100,6 +96,10 @@ th.active .arrow
   border-left: 4px solid transparent
   border-right: 4px solid transparent
   border-top: 4px solid $blue
+
+.cfs-value
+  display: inline-block;
+  padding-right: 4px;
 
 @media only screen and (max-width: 768px)
   .th-class,
