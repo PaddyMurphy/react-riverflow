@@ -13,6 +13,7 @@
     "gh-pages": "^1.0.0",
     "node-sass-chokidar": "0.0.3",
     "npm-run-all": "^4.0.2",
+    "prop-types": "^15.5.10",
     "react-scripts": "^1.0.7"
   },
   "scripts": {

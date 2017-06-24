@@ -8,8 +8,9 @@ class Tools extends Component {
   // }
 
   // bind this
-  handleClick = () => {
+  handleClick = (e) => {
     console.log('this is:', this);
+    console.log('event ', e);
   }
 
   render() {

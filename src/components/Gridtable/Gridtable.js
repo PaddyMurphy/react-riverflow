@@ -6,6 +6,12 @@ import Rivers from '../../rivers.json';
 import Conditions from '../../conditions.json';
 import './Gridtable.css';
 
+const baseMapUrl = '//maps.google.com/?q=';
+const baseUsgsUrl = 'https://waterservices.usgs.gov/nwis/iv/';
+const graphType = '00060'; // defaults to cfs
+const rivers = Rivers.data;
+let riversFormatted = [];
+
 class Gridtable extends Component {
 
   constructor(props) {
@@ -24,12 +30,8 @@ class Gridtable extends Component {
       tableData: undefined
     }
 
-    this.baseMapUrl = '//maps.google.com/?q=';
-    this.baseUsgsUrl = 'https://waterservices.usgs.gov/nwis/iv/';
-    this.graphType = '00060'; // defaults to cfs
-    this.rivers = Rivers.data;
     this.sites = this.formatSites();
-    this.riversFormatted = [];
+
   }
 
   render() {
@@ -44,13 +46,19 @@ class Gridtable extends Component {
       }
     )
 
+    let tableClasses = Classnames(
+      'table', {
+      'invisible': this.state.loading ? true : false
+      }
+    )
+
     if(data) {
       data.forEach(function (row) {
         rows.push(<Gridrow
           key={row.site}
           tableData={row}
           loading={vm.loading}
-          graphType={vm.graphType}
+          graphType={graphType}
         />)
       })
     }
@@ -68,7 +76,7 @@ class Gridtable extends Component {
 
         <div className={loadingClasses}>Loading river information...</div>
 
-        <table className="table">
+        <table className={tableClasses}>
           <thead>
             <tr>
               <th className="th-name">Name</th>
@@ -102,7 +110,7 @@ class Gridtable extends Component {
   formatSites() {
     let list = [];
 
-    this.rivers.forEach(function (d) {
+    rivers.forEach(function (d) {
       // return only number values
       if (d.value.match(/\d+/g)) {
         list.push(d.value);
@@ -119,12 +127,12 @@ class Gridtable extends Component {
   getUsgsData() {
     var vm = this;
 
-    vm.riversFormatted = [];
+    riversFormatted = [];
     vm.setState({loading: true});
     // fetch all site numbers in rivers.json
-    Axios.get(this.baseUsgsUrl, {
+    Axios.get(baseUsgsUrl, {
       params: {
-        parameterCd: this.graphType,
+        parameterCd: graphType,
         sites: this.sites,
         format: 'json',
         period: 'PT12H', // past 12 hours
@@ -199,7 +207,7 @@ class Gridtable extends Component {
 
       river = {
         'name': d.sourceInfo.siteName,
-        'location': vm.baseMapUrl + geo.latitude + ',+' + geo.longitude,
+        'location': baseMapUrl + geo.latitude + ',+' + geo.longitude,
         'site': site,
         'date': date,
         'time': time,
@@ -212,12 +220,12 @@ class Gridtable extends Component {
       }
       // TODO: add back merge with ww class
       // vm.mergeRiverInfo(river);
-      vm.riversFormatted.push(river);
+      riversFormatted.push(river);
 
       itemsProcessed++;
 
       if(itemsProcessed === a.length) {
-        vm.setState({tableData: vm.riversFormatted});
+        vm.setState({tableData: riversFormatted});
       }
     });
   }

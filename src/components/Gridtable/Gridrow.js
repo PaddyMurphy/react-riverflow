@@ -1,30 +1,32 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Classnames from 'classnames'
 import Graph from '../Graph/Graph'
-import './Gridrow.css';
+import './Gridrow.css'
 
 class Gridrow extends Component {
 
+  static propTypes = {
+    tableData: PropTypes.object.isRequired,
+    graphType: PropTypes.string.isRequired,
+    loading: PropTypes.bool
+  }
+
   constructor(props) {
     super(props);
-    /*
-      tableData: Object
-      loading: Boolean
-      graphType: String
-    */
 
     this.state = {
       selected: undefined
     }
 
     // this.sortOrders = sortOrderItems;
-    this.startDate = undefined;
-    this.endDate = new Date().toISOString().split('T')[0];
     this.sortKey = 'name';
   }
 
   render() {
     const data = this.props.tableData;
+    const endDate = new Date().toISOString().split('T')[0];
+    let startDate = undefined;
 
     let trClasses = Classnames(
       data.level, {
@@ -81,8 +83,8 @@ class Gridrow extends Component {
               </div>
               <div className="column column-graph is-three-quarters">
                 <Graph
-                  endDate={this.endDate}
-                  startDate={this.startDate}
+                  endDate={endDate}
+                  startDate={startDate}
                   selected={this.state.selected}
                   graphType={this.props.graphType}
                 />

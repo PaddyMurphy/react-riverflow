@@ -1,11 +1,17 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Classnames from 'classnames'
-import './Graph.css';
+import './Graph.css'
 
 class Graph extends Component {
 
+  static propTypes = {
+    selected: PropTypes.string,
+    graphType: PropTypes.string,
+    period: PropTypes.number
+  }
+
   constructor(props) {
-    // props: selected, graphType, period
     super(props)
 
     this.state = {
@@ -13,7 +19,6 @@ class Graph extends Component {
       loading: false,
       url: undefined
     }
-
   }
 
   componentWillReceiveProps(props) {
