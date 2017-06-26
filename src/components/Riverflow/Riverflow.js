@@ -27,6 +27,8 @@ class Riverflow extends Component {
     this.sites = this.formatSites();
   }
 
+  // lifecyle
+
   shouldComponentUpdate(nextProps, nextState) {
     if (nextState.tableData.length) {
       return true
@@ -39,6 +41,8 @@ class Riverflow extends Component {
     this.getUsgsData();
   }
 
+  // handle events
+
   // bind this
   handleRefreshTable = (e) => {
     e.preventDefault();
@@ -49,13 +53,17 @@ class Riverflow extends Component {
     this.setState({
       searchQuery: e.target.value
     });
-
-    // this.filterTable(this.state.searchQuery);
   }
 
   hideNotification (e) {
     e.preventDefault();
     e.currentTarget.parentElement.classList.add('is-hidden')
+  }
+
+  clearSearch = (e) => {
+    this.setState({
+      searchQuery: ''
+    });
   }
 
   render() {
@@ -101,7 +109,7 @@ class Riverflow extends Component {
                         type="text"
                         placeholder="Filter the table"
                       />
-                      <a className="delete is-small"> </a>
+                      <a className="delete is-small" onClick={this.clearSearch}> </a>
                     </p>
                   </div>
                 </div>
@@ -119,6 +127,7 @@ class Riverflow extends Component {
               loading={this.state.loading}
               tableData={this.state.tableData}
               graphType={this.state.graphType}
+              searchQuery={this.state.searchQuery}
             />
 
           </div>
@@ -126,6 +135,8 @@ class Riverflow extends Component {
       </div>
     );
   }
+
+  // methods
 
   formatSites() {
     let list = [];

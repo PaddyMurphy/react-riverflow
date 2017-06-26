@@ -10,7 +10,8 @@ class Gridtable extends Component {
     error: PropTypes.bool,
     graphType: PropTypes.string,
     loading: PropTypes.bool,
-    tableData: PropTypes.array
+    tableData: PropTypes.array,
+    searchQuery: PropTypes.string
   }
 
   // constructor(props) {
@@ -21,6 +22,8 @@ class Gridtable extends Component {
     const vm = this;
     let rows = [];
     let data = this.props.tableData;
+    let query = this.props.searchQuery.toLowerCase();
+    let name;
 
     let loadingClasses = Classnames(
       'loading notification is-warning', {
@@ -36,6 +39,12 @@ class Gridtable extends Component {
 
     if(data) {
       data.forEach(function (row) {
+        name = row.name.toLowerCase();
+
+        if (name.indexOf(query) === -1) {
+          return;
+        }
+
         rows.push(<Gridrow
           key={row.site}
           tableData={row}
