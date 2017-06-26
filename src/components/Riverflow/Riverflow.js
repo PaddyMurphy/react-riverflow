@@ -19,7 +19,7 @@ class Riverflow extends Component {
     this.state = {
       error: false,
       graphType: '00060', // defaults to cfs
-      loading: false,
+      loading: true,
       searchQuery: '',
       tableData: []
     }
@@ -27,10 +27,35 @@ class Riverflow extends Component {
     this.sites = this.formatSites();
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextState.tableData.length) {
+      return true
+    }
+    return false
+  }
+
+  componentDidMount() {
+    // load the river data
+    this.getUsgsData();
+  }
+
   // bind this
-  refreshTable = (e) => {
+  handleRefreshTable = (e) => {
     e.preventDefault();
     this.getUsgsData();
+  }
+
+  handleFilterTable = (e) => {
+    this.setState({
+      searchQuery: e.target.value
+    });
+
+    // this.filterTable(this.state.searchQuery);
+  }
+
+  hideNotification (e) {
+    e.preventDefault();
+    e.currentTarget.parentElement.classList.add('is-hidden')
   }
 
   render() {
@@ -40,17 +65,24 @@ class Riverflow extends Component {
       }
     )
 
+    let errorClasses = Classnames(
+      'notification is-danger', {
+      'is-hidden': this.state.error === false
+      }
+    )
+
     return (
       <div className="rivertable">
         <section className="section">
           <div className="container">
             <div className="Riverflow">
-              <div className="notification is-danger is-hidden">
-                <button className="delete"></button>
+              <div className={errorClasses}>
+                <button className="delete" onClick={this.hideNotification}></button>
+                {this.state.error}
               </div>
 
               <div className="notification content">
-                <a className="delete is-small"> </a>
+                <button className="delete is-small" onClick={this.hideNotification}> </button>
                 <p>Riverflow provides the latest <abbr title="cubic feet per second">CFS</abbr> from the USGS gauges of floatable rivers and creeks. The color indicates optimal floating conditions with additional inforamtion and a 7 day graph in the details.</p>
               </div>
 
@@ -60,14 +92,22 @@ class Riverflow extends Component {
                   <div className="field level-item">
                     <label htmlFor="search" className="label">Search</label>
                     <p className="control">
-                      <input disabled id="search" name="search" className="input" type="text" placeholder="Filter the table" />
+                      <input
+                        onChange={this.handleFilterTable}
+                        value={this.state.searchQuery}
+                        id="search"
+                        name="search"
+                        className="input"
+                        type="text"
+                        placeholder="Filter the table"
+                      />
                       <a className="delete is-small"> </a>
                     </p>
                   </div>
                 </div>
 
                 <div className="column column-button">
-                  <button className={refreshClasses} onClick={this.refreshTable}>
+                  <button className={refreshClasses} onClick={this.handleRefreshTable}>
                     <span className="refresh-long is-hidden-mobile">refresh river table</span>
                     <span className="refresh-short is-hidden-tablet">&#8634;</span>
                   </button>
@@ -85,11 +125,6 @@ class Riverflow extends Component {
         </section>
       </div>
     );
-  }
-
-  componentDidMount() {
-    // load the river data
-    this.getUsgsData();
   }
 
   formatSites() {
@@ -126,7 +161,7 @@ class Riverflow extends Component {
       this.setState({loading: false});
       if (response.data.value.timeSeries) {
         this.displayUsgsData(response.data.value.timeSeries);
-        this.setState({error: ''});
+        this.setState({error: false});
       } else {
         this.setState({error: 'no river data available'});
       }
