@@ -8,8 +8,7 @@ class Gridrow extends Component {
 
   static propTypes = {
     tableData: PropTypes.object.isRequired,
-    graphType: PropTypes.string.isRequired,
-    loading: PropTypes.bool
+    graphType: PropTypes.string.isRequired
   }
 
   constructor(props) {

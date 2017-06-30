@@ -85,12 +85,12 @@ class Riverflow extends Component {
           <div className="container">
             <div className="Riverflow">
               <div className={errorClasses}>
-                <a className="delete" onClick={this.hideNotification}> </a>
+                <a className="delete" onClick={this.hideNotification} aria-label="close error message"> </a>
                 {this.state.error}
               </div>
 
               <div className="notification content">
-                <button className="delete is-small" onClick={this.hideNotification}> </button>
+                <button aria-label="Close the notification" className="delete is-small" onClick={this.hideNotification}> </button>
                 <p>Riverflow provides the latest <abbr title="cubic feet per second">CFS</abbr> from the USGS gauges of floatable rivers and creeks. The color indicates optimal floating conditions with additional inforamtion and a 7 day graph in the details.</p>
               </div>
 
@@ -109,13 +109,13 @@ class Riverflow extends Component {
                         type="text"
                         placeholder="Filter the table"
                       />
-                      <a className="delete is-small" onClick={this.clearSearch}> </a>
+                      <a className="delete is-small" onClick={this.clearSearch} aria-label="clear the search"> </a>
                     </p>
                   </div>
                 </div>
 
                 <div className="column column-button">
-                  <button className={refreshClasses} onClick={this.handleRefreshTable}>
+                  <button className={refreshClasses} onClick={this.handleRefreshTable} aria-label="Refresh the table data">
                     <span className="refresh-long is-hidden-mobile">refresh river table</span>
                     <span className="refresh-short is-hidden-tablet">&#8634;</span>
                   </button>

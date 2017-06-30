@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { shallow } from 'enzyme';
 import Gridrow from './Gridrow.js';
 
-const testData = {
+
+const tableData = {
   "name": "Brazos Rv nr Palo Pinto, TX",
   "location": "//maps.google.com/?q=32.8626236,+-98.3025492",
   "site": "08089000",
@@ -22,7 +22,7 @@ const div = document.createElement('table');
 
 it('renders without crashing', () => {
   // render row with test data
-  ReactDOM.render(<Gridrow loading={true} graphType="00060" tableData={testData} />, div);
+  ReactDOM.render(<Gridrow graphType="00060" tableData={tableData} />, div);
 });
 
 
@@ -32,4 +32,8 @@ it('should contain two table rows', () => {
   numberRows = div.querySelectorAll('tbody tr').length;
 
   expect(numberRows).toEqual(2);
+});
+
+it('should render the tableData', () => {
+  expect(tableData.cfs).toEqual(174);
 });

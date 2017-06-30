@@ -92,7 +92,6 @@ class Gridtable extends Component {
       rows.push(<Gridrow
         key={row.site}
         tableData={row}
-        loading={vm.props.loading}
         graphType={vm.props.graphType}
       />)
     })
