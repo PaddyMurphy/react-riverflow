@@ -5,3 +5,25 @@
 
 .loading
   text-align: center
+
+// table sorting sort arrows
+.desc,
+.asc
+  cursor: pointer
+
+.desc:after,
+.asc:after
+  color: #0088CC
+  display: none
+  font-size: 1em
+  padding-left: 0.25em
+
+.desc.active:after,
+.asc.active:after
+  display: inline-block
+
+.desc:after
+  content: '\25bc'
+
+.asc:after
+  content: '\25b2'

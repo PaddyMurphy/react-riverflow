@@ -85,7 +85,7 @@ class Riverflow extends Component {
           <div className="container">
             <div className="Riverflow">
               <div className={errorClasses}>
-                <button className="delete" onClick={this.hideNotification}></button>
+                <a className="delete" onClick={this.hideNotification}> </a>
                 {this.state.error}
               </div>
 

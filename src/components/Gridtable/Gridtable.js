@@ -14,9 +14,24 @@ class Gridtable extends Component {
     searchQuery: PropTypes.string
   }
 
-  // constructor(props) {
-  //   super(props);
-  // }
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      'sortOrder': 1,
+      'sortField': 'name'
+    }
+  }
+
+  componentWillMount() {
+    // define state changes in componentWillMount
+    this.handleSort = (e) => {
+      this.setState({
+        sortField: e.target.dataset.sort,
+        sortOrder: (this.state.sortOrder === 1) ? -1 : 1
+      });
+    }
+  }
 
   render() {
     const vm = this;
@@ -37,22 +52,50 @@ class Gridtable extends Component {
       }
     )
 
-    if(data) {
-      data.forEach(function (row) {
-        name = row.name.toLowerCase();
+    let sortNameClasses = Classnames({
+      'active': this.state.sortField === 'name',
+      'asc': this.state.sortOrder === -1,
+      'desc': this.state.sortOrder === 1
+    })
 
-        if (name.indexOf(query) === -1) {
-          return;
-        }
+    let sortCfsClasses = Classnames({
+      'active': this.state.sortField === 'cfs',
+      'asc': this.state.sortOrder === -1,
+      'desc': this.state.sortOrder === 1
+    })
 
-        rows.push(<Gridrow
-          key={row.site}
-          tableData={row}
-          loading={vm.props.loading}
-          graphType={vm.props.graphType}
-        />)
+    // sort first
+    if (vm.state.sortField === 'cfs') {
+      // sort by number
+      data = data.slice().sort(function (a, b) {
+        a = a[vm.state.sortField]
+        b = b[vm.state.sortField]
+        return (a - b) * vm.state.sortOrder
+      })
+    } else {
+      // sort by string
+      data = data.slice().sort(function (a, b) {
+        a = a[vm.state.sortField]
+        b = b[vm.state.sortField]
+        return (a === b ? 0 : a > b ? 1 : -1) * vm.state.sortOrder
       })
     }
+
+    // construct the table rows
+    data.forEach(function (row) {
+      name = row.name.toLowerCase();
+
+      if (name.indexOf(query) === -1) {
+        return;
+      }
+
+      rows.push(<Gridrow
+        key={row.site}
+        tableData={row}
+        loading={vm.props.loading}
+        graphType={vm.props.graphType}
+      />)
+    })
 
     return (
       <div className="gridtable">
@@ -70,8 +113,12 @@ class Gridtable extends Component {
         <table className={tableClasses}>
           <thead>
             <tr>
-              <th className="th-name">Name</th>
-              <th className="th-cfs">Cfs</th>
+              <th className="th-name">
+                <a data-sort="name" className={sortNameClasses} onClick={this.handleSort}>Name</a>
+              </th>
+              <th className="th-cfs">
+                <a data-sort="cfs" className={sortCfsClasses} onClick={this.handleSort}>Cfs</a>
+              </th>
               <th className="th-class">Class</th>
               <th className="th-time">Time</th>
 
