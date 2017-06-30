@@ -247,9 +247,8 @@ class Riverflow extends Component {
         'rising': rising,
         'risingFast': risingFast
       }
-      // TODO: add back merge with ww class
-      // vm.mergeRiverInfo(river);
-      riversFormatted.push(river);
+      // merge additional river data
+      vm.mergeRiverInfo(river);
 
       itemsProcessed++;
 
@@ -263,19 +262,16 @@ class Riverflow extends Component {
    * matches are based on USGS site numbers
    * @param {Object} river
    */
-  // mergeRiverInfo(river) {
-  //   const vm = this;
-  //   const currentRiver = river.site;
+  mergeRiverInfo(river) {
+    rivers.forEach(function (d) {
+      // add white water class
+      if (d.value === river.site) {
+        river.class = d.class;
+      }
+    });
 
-  //   vm.rivers.forEach(function (d) {
-  //     // add white water class
-  //     if (d.value === currentRiver) {
-  //       river.class = d.class;
-  //     }
-  //   });
-
-  //   vm.riversFormatted.push(river);
-  // }
+    riversFormatted.push(river);
+  }
 
   /**
    * Returns condition description and level color code from conditions.json
