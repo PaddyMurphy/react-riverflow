@@ -197,7 +197,6 @@ class Riverflow extends Component {
     let currentValue;
     let date;
     let geo;
-    let itemsProcessed = 0;
     let oldestValue;
     let newestValue;
     let percentChanged;
@@ -249,13 +248,9 @@ class Riverflow extends Component {
       }
       // merge additional river data
       vm.mergeRiverInfo(river);
-
-      itemsProcessed++;
-
-      if(itemsProcessed === a.length) {
-        vm.setState({tableData: riversFormatted});
-      }
     });
+
+    vm.setState({tableData: riversFormatted});
   }
   /**
    * Merges class from rivers.json to matching response
