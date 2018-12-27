@@ -3,22 +3,6 @@
   "homepage": "https://mountaindrawn.com/react-riverflow",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "enzyme": "^2.9.1",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
-    "react-test-renderer": "^15.6.1",
-    "sinon": "^2.3.6"
-  },
-  "devDependencies": {
-    "axios": "^0.16.2",
-    "bulma": "^0.4.2",
-    "gh-pages": "^1.0.0",
-    "node-sass-chokidar": "0.0.3",
-    "npm-run-all": "^4.0.2",
-    "prop-types": "^15.5.10",
-    "react-scripts": "^1.0.7"
-  },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
@@ -29,5 +13,32 @@
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
-  }
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "bulma": "^0.7.2",
+    "classnames": "^2.2.6",
+    "enzyme": "^3.8.0",
+    "google-maps": "^3.3.0",
+    "node-sass": "^4.11.0",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-test-renderer": "^16.7.0",
+    "sinon": "^7.2.2"
+  },
+  "devDependencies": {
+    "eslint-plugin-prettier": "^3.0.0",
+    "gh-pages": "^2.0.1",
+    "node-sass-chokidar": "1.3.4",
+    "npm-run-all": "^4.0.2",
+    "prettier": "^1.15.3",
+    "prop-types": "^15.5.10",
+    "react-scripts": "^2.1.2"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
