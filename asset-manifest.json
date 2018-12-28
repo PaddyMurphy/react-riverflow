@@ -1,6 +1,13 @@
 {
-  "main.css": "static/css/main.62082a4e.css",
-  "main.css.map": "static/css/main.62082a4e.css.map",
-  "main.js": "static/js/main.bd8dd669.js",
-  "main.js.map": "static/js/main.bd8dd669.js.map"
+  "main.css": "/react-riverflow/static/css/main.d4f6b6ec.chunk.css",
+  "main.js": "/react-riverflow/static/js/main.eb8ca4c3.chunk.js",
+  "main.js.map": "/react-riverflow/static/js/main.eb8ca4c3.chunk.js.map",
+  "static/js/1.f7a12ccc.chunk.js": "/react-riverflow/static/js/1.f7a12ccc.chunk.js",
+  "static/js/1.f7a12ccc.chunk.js.map": "/react-riverflow/static/js/1.f7a12ccc.chunk.js.map",
+  "runtime~main.js": "/react-riverflow/static/js/runtime~main.37cf6b9a.js",
+  "runtime~main.js.map": "/react-riverflow/static/js/runtime~main.37cf6b9a.js.map",
+  "static/css/main.d4f6b6ec.chunk.css.map": "/react-riverflow/static/css/main.d4f6b6ec.chunk.css.map",
+  "index.html": "/react-riverflow/index.html",
+  "precache-manifest.f4ff2f84c86d59b6c1780bee1b5ebf0c.js": "/react-riverflow/precache-manifest.f4ff2f84c86d59b6c1780bee1b5ebf0c.js",
+  "service-worker.js": "/react-riverflow/service-worker.js"
 }
