@@ -26,8 +26,6 @@ class Riverflow extends Component {
     this.sites = this.formatSites();
   }
 
-  // lifecyle
-
   shouldComponentUpdate(nextProps, nextState) {
     if (nextState.tableData.length) {
       return true;
@@ -80,13 +78,13 @@ class Riverflow extends Component {
           <div className="container">
             <div className="Riverflow">
               <div className={errorClasses}>
-                <a
+                <button
                   className="delete"
                   onClick={this.hideNotification}
                   aria-label="close error message"
                 >
                   {' '}
-                </a>
+                </button>
                 {this.state.error}
               </div>
 
@@ -115,6 +113,7 @@ class Riverflow extends Component {
                     </label>
                     <p className="control">
                       <input
+                        autoComplete="off"
                         onChange={this.handleFilterTable}
                         value={this.state.searchQuery}
                         id="search"
@@ -123,13 +122,13 @@ class Riverflow extends Component {
                         type="text"
                         placeholder="Filter the table"
                       />
-                      <a
+                      <button
                         className="delete is-small"
                         onClick={this.clearSearch}
                         aria-label="clear the search"
                       >
                         {' '}
-                      </a>
+                      </button>
                     </p>
                   </div>
                 </div>

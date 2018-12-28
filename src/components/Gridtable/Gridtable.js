@@ -111,22 +111,22 @@ class Gridtable extends Component {
 					<thead>
 						<tr>
 							<th className="th-name">
-								<a
+								<button
 									data-sort="name"
 									className={sortNameClasses}
 									onClick={this.handleSort}
 								>
 									Name
-								</a>
+								</button>
 							</th>
 							<th className="th-cfs">
-								<a
+								<button
 									data-sort="cfs"
 									className={sortCfsClasses}
 									onClick={this.handleSort}
 								>
 									Cfs
-								</a>
+								</button>
 							</th>
 							<th className="th-class">Class</th>
 							<th className="th-time">Time</th>

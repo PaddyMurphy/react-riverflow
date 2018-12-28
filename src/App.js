@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Navbar from './components/Navbar/Navbar';
 import Riverflow from './components/Riverflow/Riverflow';
 import Footer from './components/Footer/Footer';
-import GoogleMaps from './components/PlacesLookup';
+//import GoogleMaps from './components/Map';
 import './App.sass';
 
 class App extends Component {
@@ -10,6 +10,8 @@ class App extends Component {
 		return (
 			<div className="App">
 				<Navbar />
+
+				{/* <GoogleMaps /> */}
 
 				<Riverflow />
 
