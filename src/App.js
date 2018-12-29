@@ -2,23 +2,40 @@ import React, { Component } from 'react';
 import Navbar from './components/Navbar/Navbar';
 import Riverflow from './components/Riverflow/Riverflow';
 import Footer from './components/Footer/Footer';
-import './App.css';
+//import GoogleMaps from './components/Map'; // eslint-disable-line
+import './App.sass';
 
 class App extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			selected: null,
+		};
+	}
 
-  render() {
-    return (
-      <div className="App">
+	componentDidMount() {
+		const { id } = this.props.match.params;
+		// if id set selected
+		if (id) {
+			this.setState({ selected: id });
+		}
+	}
 
-        <Navbar />
+	render() {
+		const { selected } = this.state;
 
-        <Riverflow />
+		return (
+			<div className="App">
+				<Navbar />
 
-        <Footer />
+				{/* <GoogleMaps /> */}
 
-      </div>
-    );
-  }
+				<Riverflow selected={selected} />
+
+				<Footer />
+			</div>
+		);
+	}
 }
 
 export default App;

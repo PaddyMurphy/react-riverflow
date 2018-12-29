@@ -1,0 +1,17 @@
+.Error404 {
+    // 404 page
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
+    height: 100vh;
+    h1 {
+        font-size: 35px;
+        margin-bottom: 100px;
+        text-align: center;
+    }
+    &-icon {
+        font-size: 150px;
+    }
+}

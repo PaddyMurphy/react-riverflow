@@ -1,24 +1,23 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import Classnames from 'classnames'
-import './Graph.css'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import Classnames from 'classnames';
+import './Graph.sass';
 
 class Graph extends Component {
-
   static propTypes = {
     selected: PropTypes.string,
     graphType: PropTypes.string,
-    period: PropTypes.number
-  }
+    period: PropTypes.number,
+  };
 
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       error: false,
       loading: false,
-      url: undefined
-    }
+      url: undefined,
+    };
   }
 
   componentWillReceiveProps(props) {
@@ -28,31 +27,28 @@ class Graph extends Component {
   }
 
   render() {
+    let elClasses = Classnames('graph-wrapper', {
+      'has-error': this.state.error ? true : false,
+    });
 
-    let elClasses = Classnames (
-      'graph-wrapper', {
-      'has-error': this.state.error ? true : false
-      }
-    )
-
-    let loadingClasses = Classnames (
-      'graph-loading', {
-      'is-hidden': this.state.loading ? false : true
-      }
-    )
+    let loadingClasses = Classnames('graph-loading', {
+      'is-hidden': this.state.loading ? false : true,
+    });
 
     return (
       <div className={elClasses}>
         <div className={loadingClasses}>Loading graph...</div>
 
         <div className="graph-image">
-          {this.state.url &&
-            <img src={this.state.url} className="graph" alt="USGS Water-data graph" />
-          }
+          {this.state.url && (
+            <img
+              src={this.state.url}
+              className="graph"
+              alt="USGS Water-data graph"
+            />
+          )}
 
-          {this.state.error &&
-            <h2>Error loading the graph.</h2>
-          }
+          {this.state.error && <h2>Error loading the graph.</h2>}
         </div>
       </div>
     );
@@ -64,28 +60,30 @@ class Graph extends Component {
     //       effects: Pecas at Pecos river 08419000
     //       parm_cd=00060 (cfs) or 00065 (guage height ft)
     const vm = this;
-    const graphBaseUrl = '//waterdata.usgs.gov/nwisweb/graph?agency_cd=USGS&period=7';
+    const graphBaseUrl =
+      '//waterdata.usgs.gov/nwisweb/graph?agency_cd=USGS&period=7';
     // NOTE: usgs documentation is incorrect 'startDt' is 'begin_date'
-    let url = graphBaseUrl + '&parm_cd=' + vm.props.graphType + '&site_no=' + selected;
+    let url =
+      graphBaseUrl + '&parm_cd=' + vm.props.graphType + '&site_no=' + selected;
 
     // reset the graph and show / hide loading
-    vm.setState({loading: true});
+    vm.setState({ loading: true });
 
     let newImage = new Image();
     newImage.src = url;
-    newImage.onload = function (e) {
+    newImage.onload = function(e) {
       vm.setState({
         loading: false,
-        url: url
+        url: url,
       });
-    }
-    newImage.onerror = function (e) {
+    };
+    newImage.onerror = function(e) {
       vm.setState({
         error: true,
         loading: false,
-        url: undefined
+        url: undefined,
       });
-    }
+    };
   }
 }
 
