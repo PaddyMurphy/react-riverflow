@@ -1,13 +1,13 @@
 {
-  "main.css": "/react-riverflow/static/css/main.d4f6b6ec.chunk.css",
-  "main.js": "/react-riverflow/static/js/main.eb8ca4c3.chunk.js",
-  "main.js.map": "/react-riverflow/static/js/main.eb8ca4c3.chunk.js.map",
-  "static/js/1.f7a12ccc.chunk.js": "/react-riverflow/static/js/1.f7a12ccc.chunk.js",
-  "static/js/1.f7a12ccc.chunk.js.map": "/react-riverflow/static/js/1.f7a12ccc.chunk.js.map",
+  "main.css": "/react-riverflow/static/css/main.94ee6356.chunk.css",
+  "main.js": "/react-riverflow/static/js/main.4cc181fa.chunk.js",
+  "main.js.map": "/react-riverflow/static/js/main.4cc181fa.chunk.js.map",
+  "static/js/1.a0126c90.chunk.js": "/react-riverflow/static/js/1.a0126c90.chunk.js",
+  "static/js/1.a0126c90.chunk.js.map": "/react-riverflow/static/js/1.a0126c90.chunk.js.map",
   "runtime~main.js": "/react-riverflow/static/js/runtime~main.37cf6b9a.js",
   "runtime~main.js.map": "/react-riverflow/static/js/runtime~main.37cf6b9a.js.map",
-  "static/css/main.d4f6b6ec.chunk.css.map": "/react-riverflow/static/css/main.d4f6b6ec.chunk.css.map",
+  "static/css/main.94ee6356.chunk.css.map": "/react-riverflow/static/css/main.94ee6356.chunk.css.map",
   "index.html": "/react-riverflow/index.html",
-  "precache-manifest.f4ff2f84c86d59b6c1780bee1b5ebf0c.js": "/react-riverflow/precache-manifest.f4ff2f84c86d59b6c1780bee1b5ebf0c.js",
+  "precache-manifest.c46df629647031d64ebe343aebec834d.js": "/react-riverflow/precache-manifest.c46df629647031d64ebe343aebec834d.js",
   "service-worker.js": "/react-riverflow/service-worker.js"
 }
