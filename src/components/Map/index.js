@@ -28,13 +28,12 @@ class Maps extends Component {
 		}
 	}
 
-	// google maps places api
-	// NOTE: using patrick's personal key with limits set so I don't get charged
-	// admin https://console.cloud.google.com/apis
+	// NOTE: key retricted to the riverflow domain
+	// with limits set so I don't get charged
 	loadGoogleMapsAPI(callback) {
 		// load google maps
 		GoogleMapsLoader.VERSION = '3.34';
-		GoogleMapsLoader.KEY = 'AIzaSyAV7uorSExMCoSeQvjz48305OXAGx8DrMc';
+		GoogleMapsLoader.KEY = 'AIzaSyDf-t-gqXzgp18H4Zulo_q2tDWUjvkEjtU';
 		GoogleMapsLoader.LIBRARIES = this.props.libraries;
 		GoogleMapsLoader.load(google => {});
 		GoogleMapsLoader.onLoad(google => {
@@ -44,6 +43,7 @@ class Maps extends Component {
 
 	initializeGoogle() {
 		let googleMap = document.getElementById('google-map');
+		// eslint-disable-next-line
 		let map = new google.maps.Map(googleMap, {
 			center: { lat: 30.2672, lng: -97.7431 },
 			zoom: 8,

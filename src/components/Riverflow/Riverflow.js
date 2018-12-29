@@ -1,17 +1,22 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Axios from 'axios';
 import Classnames from 'classnames';
 import Gridtable from '../../components/Gridtable/Gridtable';
 import Rivers from '../../rivers.json';
 import Conditions from '../../conditions.json';
+import { Errors, Notification } from './components';
 import './Riverflow.sass';
 
-const baseMapUrl = '//maps.google.com/?q=';
-const baseUsgsUrl = 'https://waterservices.usgs.gov/nwis/iv/';
-const rivers = Rivers.data;
-let riversFormatted = [];
-
 class Riverflow extends Component {
+  static propTypes = {
+    selected: PropTypes.string,
+  };
+
+  static defaultProps = {
+    selected: null,
+  };
+
   constructor(props) {
     super(props);
 
@@ -19,10 +24,14 @@ class Riverflow extends Component {
       error: false,
       graphType: '00060', // defaults to cfs
       loading: true,
-      searchQuery: '',
+      searchQuery: '', // search filter
       tableData: [],
     };
 
+    this.baseMapUrl = '//maps.google.com/?q=';
+    this.baseUsgsUrl = 'https://waterservices.usgs.gov/nwis/iv/';
+    this.rivers = Rivers.data;
+    this.riversFormatted = [];
     this.sites = this.formatSites();
   }
 
@@ -38,9 +47,6 @@ class Riverflow extends Component {
     this.getUsgsData();
   }
 
-  // handle events
-
-  // bind this
   handleRefreshTable = e => {
     e.preventDefault();
     this.getUsgsData();
@@ -64,6 +70,9 @@ class Riverflow extends Component {
   };
 
   render() {
+    const { error, graphType, loading, searchQuery, tableData } = this.state;
+    const { selected } = this.props;
+
     let refreshClasses = Classnames('button is-primary', {
       'is-loading': this.state.loading,
     });
@@ -77,33 +86,13 @@ class Riverflow extends Component {
         <section className="section">
           <div className="container">
             <div className="Riverflow">
-              <div className={errorClasses}>
-                <button
-                  className="delete"
-                  onClick={this.hideNotification}
-                  aria-label="close error message"
-                >
-                  {' '}
-                </button>
-                {this.state.error}
-              </div>
+              <Errors
+                classes={errorClasses}
+                error={error}
+                hide={this.hideNotification}
+              />
 
-              <div className="notification content">
-                <button
-                  aria-label="Close the notification"
-                  className="delete is-small"
-                  onClick={this.hideNotification}
-                >
-                  {' '}
-                </button>
-                <p>
-                  Riverflow provides the latest{' '}
-                  <abbr title="cubic feet per second">CFS</abbr> from the USGS
-                  gauges of floatable rivers and creeks. The color indicates
-                  optimal floating conditions with additional inforamtion and a
-                  7 day graph in the details.
-                </p>
-              </div>
+              <Notification hide={this.hideNotification} />
 
               <div className="columns is-flex tools">
                 <div className="column column-search">
@@ -115,7 +104,7 @@ class Riverflow extends Component {
                       <input
                         autoComplete="off"
                         onChange={this.handleFilterTable}
-                        value={this.state.searchQuery}
+                        value={searchQuery}
                         id="search"
                         name="search"
                         className="input"
@@ -151,10 +140,11 @@ class Riverflow extends Component {
             </div>
 
             <Gridtable
-              loading={this.state.loading}
-              tableData={this.state.tableData}
-              graphType={this.state.graphType}
-              searchQuery={this.state.searchQuery}
+              loading={loading}
+              tableData={tableData}
+              graphType={graphType}
+              searchQuery={searchQuery}
+              selected={selected}
             />
           </div>
         </section>
@@ -164,10 +154,19 @@ class Riverflow extends Component {
 
   // methods
 
+  scrollIntoView() {
+    window.setTimeout(() => {
+      const el = document.querySelector('.is-selected');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 1000); // delay for usability
+  }
+
   formatSites() {
     let list = [];
 
-    rivers.forEach(function(d) {
+    this.rivers.forEach(function(d) {
       // return only number values
       if (d.value.match(/\d+/g)) {
         list.push(d.value);
@@ -182,10 +181,10 @@ class Riverflow extends Component {
    * @return {number[]} response
    */
   getUsgsData() {
-    riversFormatted = [];
+    this.riversFormatted = [];
     this.setState({ loading: true });
     // fetch all site numbers in rivers.json
-    Axios.get(baseUsgsUrl, {
+    Axios.get(this.baseUsgsUrl, {
       params: {
         parameterCd: this.state.graphType,
         sites: this.sites,
@@ -198,6 +197,7 @@ class Riverflow extends Component {
         this.setState({ loading: false });
         if (response.data.value.timeSeries) {
           this.displayUsgsData(response.data.value.timeSeries);
+          this.scrollIntoView();
           this.setState({ error: false });
         } else {
           this.setState({ error: 'no river data available' });
@@ -216,7 +216,7 @@ class Riverflow extends Component {
    * @param {number[]} response - usgs fetch response.
    */
   displayUsgsData(response) {
-    const vm = this;
+    const that = this;
     const today = new Date();
     let arr;
     let river = {};
@@ -265,22 +265,22 @@ class Riverflow extends Component {
 
       river = {
         name: d.sourceInfo.siteName,
-        location: baseMapUrl + geo.latitude + ',+' + geo.longitude,
+        location: that.baseMapUrl + geo.latitude + ',+' + geo.longitude,
         site: site,
         date: date,
         time: time,
         cfs: newestValue,
         oldCfs: oldestValue,
-        condition: vm.getConditions(newestValue).condition,
-        level: vm.getConditions(newestValue).level,
+        condition: that.getConditions(newestValue).condition,
+        level: that.getConditions(newestValue).level,
         rising: rising,
         risingFast: risingFast,
       };
       // merge additional river data
-      vm.mergeRiverInfo(river);
+      that.mergeRiverInfo(river);
     });
 
-    vm.setState({ tableData: riversFormatted });
+    that.setState({ tableData: this.riversFormatted });
   }
   /**
    * Merges class from rivers.json to matching response
@@ -288,14 +288,14 @@ class Riverflow extends Component {
    * @param {Object} river
    */
   mergeRiverInfo(river) {
-    rivers.forEach(function(d) {
+    this.rivers.forEach(function(d) {
       // add white water class
       if (d.value === river.site) {
         river.class = d.class;
       }
     });
 
-    riversFormatted.push(river);
+    this.riversFormatted.push(river);
   }
 
   /**

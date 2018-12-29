@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Classnames from 'classnames';
 import Graph from '../Graph/Graph';
@@ -22,6 +23,11 @@ class Gridrow extends Component {
 		};
 	}
 
+	componentDidMount() {
+		const { selected } = this.props;
+		this.setState({ selected: selected });
+	}
+
 	sortBy(key) {
 		this.setState({ sortKey: key }, () => {
 			this.sortOrders[key] = this.sortOrders[key] * -1;
@@ -31,6 +37,13 @@ class Gridrow extends Component {
 	// binds this
 	selectRiver(e) {
 		const target = e.currentTarget;
+		const id = target.dataset.selected;
+		// set the url
+		if (id) {
+			this.props.history.push({
+				pathname: `${id}`,
+			});
+		}
 
 		// deselect if clicking the active row
 		if (target.classList.contains('is-selected')) {
@@ -120,4 +133,4 @@ class Gridrow extends Component {
 	}
 }
 
-export default Gridrow;
+export default withRouter(Gridrow);

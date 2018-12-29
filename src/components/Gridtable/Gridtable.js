@@ -11,6 +11,7 @@ class Gridtable extends Component {
 		loading: PropTypes.bool,
 		tableData: PropTypes.array,
 		searchQuery: PropTypes.string,
+		selected: PropTypes.string,
 	};
 
 	constructor(props) {
@@ -22,7 +23,7 @@ class Gridtable extends Component {
 		};
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		this.handleSort = e => {
 			this.setState({
 				sortField: e.target.dataset.sort,
@@ -34,6 +35,8 @@ class Gridtable extends Component {
 	render() {
 		const that = this;
 		const { sortField, sortOrder } = this.state;
+		const { selected } = this.props;
+
 		let rows = [];
 		let data = this.props.tableData;
 		let query = this.props.searchQuery.toLowerCase();
@@ -89,6 +92,7 @@ class Gridtable extends Component {
 					key={row.site}
 					tableData={row}
 					graphType={that.props.graphType}
+					selected={selected}
 				/>,
 			);
 		});
