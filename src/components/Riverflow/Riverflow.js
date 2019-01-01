@@ -6,6 +6,7 @@ import Gridtable from '../../components/Gridtable/Gridtable';
 import Rivers from '../../rivers.json';
 import Conditions from '../../conditions.json';
 import { Errors, Notification } from './components';
+import { USGS_GRAPH_TYPE } from '../../constants';
 import './Riverflow.sass';
 
 class Riverflow extends Component {
@@ -22,7 +23,7 @@ class Riverflow extends Component {
 
     this.state = {
       error: false,
-      graphType: '00060', // defaults to cfs
+      graphType: USGS_GRAPH_TYPE, // defaults to cfs
       loading: true,
       searchQuery: '', // search filter
       tableData: [],
@@ -92,7 +93,7 @@ class Riverflow extends Component {
                 hide={this.hideNotification}
               />
 
-              <Notification hide={this.hideNotification} />
+              {/* <Notification hide={this.hideNotification} /> */}
 
               <div className="columns is-flex tools">
                 <div className="column column-search">

@@ -91,7 +91,7 @@ class Gridtable extends Component {
 				<Gridrow
 					key={row.site}
 					tableData={row}
-					graphType={that.props.graphType}
+					//graphType={that.props.graphType}
 					selected={selected}
 				/>,
 			);

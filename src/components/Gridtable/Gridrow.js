@@ -3,12 +3,17 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Classnames from 'classnames';
 import Graph from '../Graph/Graph';
+import { USGS_GRAPH_TYPE } from '../../constants';
 import './Gridrow.css';
 
 class Gridrow extends Component {
 	static propTypes = {
 		tableData: PropTypes.object.isRequired,
 		graphType: PropTypes.string.isRequired,
+	};
+
+	static defaultProps = {
+		graphType: USGS_GRAPH_TYPE,
 	};
 
 	constructor(props) {
@@ -34,12 +39,20 @@ class Gridrow extends Component {
 		});
 	}
 
-	// binds this
 	selectRiver(e) {
+		const urlId = this.props.location.pathname.replace('/', '');
 		const target = e.currentTarget;
 		const id = target.dataset.selected;
-		// set the url
-		if (id) {
+		console.log(this.props.history);
+
+		// remove from url if the same
+		if (id && id === urlId) {
+			console.log(urlId);
+			this.props.history.push({
+				pathname: '/',
+			});
+		} else if (id && id !== urlId) {
+			// otherwise set the url
 			this.props.history.push({
 				pathname: `${id}`,
 			});
