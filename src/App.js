@@ -2,40 +2,41 @@ import React, { Component } from 'react';
 import Navbar from './components/Navbar/Navbar';
 import Riverflow from './components/Riverflow/Riverflow';
 import Footer from './components/Footer/Footer';
+import { withRouter } from './withRouter';
 //import GoogleMaps from './components/Map'; // eslint-disable-line
 import './App.sass';
 
 class App extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			selected: null,
-		};
-	}
+    constructor(props) {
+        super(props);
+        this.state = {
+            selected: null,
+        };
+    }
 
-	componentDidMount() {
-		const { id } = this.props.match.params;
-		// if id set selected
-		if (id) {
-			this.setState({ selected: id });
-		}
-	}
+    componentDidMount() {
+        const { id } = this.props.match.params;
+        // if id set selected
+        if (id) {
+            this.setState({ selected: id });
+        }
+    }
 
-	render() {
-		const { selected } = this.state;
+    render() {
+        const { selected } = this.state;
 
-		return (
-			<div className="App">
-				<Navbar />
+        return (
+            <div className="App">
+                <Navbar />
 
-				{/* <GoogleMaps /> */}
+                {/* <GoogleMaps /> */}
 
-				<Riverflow selected={selected} />
+                <Riverflow selected={selected} />
 
-				<Footer />
-			</div>
-		);
-	}
+                <Footer />
+            </div>
+        );
+    }
 }
 
-export default App;
+export default withRouter(App);

@@ -1,11 +1,16 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { shallow, render, mount } from 'enzyme';
+import { render } from '@testing-library/react';
+import { beforeEach, it, expect, vi } from 'vitest';
 import Riverflow from './Riverflow';
-import './Riverflow.css';
+
+beforeEach(() => {
+    globalThis.fetch = vi.fn(() =>
+        Promise.resolve({ ok: true, json: () => Promise.resolve({ value: {} }) })
+    );
+});
 
 it('renders without crashing', () => {
-  const riverflow = shallow(<Riverflow />);
-  // rivertable should render once
-  expect(riverflow.find('.rivertable').length).toBe(1);
+    const { container } = render(<Riverflow />);
+    // rivertable should render once
+    expect(container.querySelectorAll('.rivertable').length).toBe(1);
 });

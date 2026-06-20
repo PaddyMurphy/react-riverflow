@@ -1,8 +1,21 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { shallow } from 'enzyme';
+import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import { beforeEach, it, expect, vi } from 'vitest';
 import App from './App';
 
+beforeEach(() => {
+  // App -> Riverflow fetches USGS data on mount
+  globalThis.fetch = vi.fn(() =>
+    Promise.resolve({ ok: true, json: () => Promise.resolve({ value: {} }) }),
+  );
+});
+
 it('renders without crashing', () => {
-  shallow(<App />);
+  render(
+    <MemoryRouter>
+      <App />
+    </MemoryRouter>,
+  );
+  expect(screen.getByRole('heading', { name: 'Riverflow' })).toBeInTheDocument();
 });

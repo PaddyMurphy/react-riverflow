@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Axios from 'axios';
 import Classnames from 'classnames';
 import Gridtable from '../../components/Gridtable/Gridtable';
 import Rivers from '../../rivers.json';
@@ -184,19 +183,25 @@ class Riverflow extends Component {
     this.riversFormatted = [];
     this.setState({ loading: true });
     // fetch all site numbers in rivers.json
-    Axios.get(this.baseUsgsUrl, {
-      params: {
-        parameterCd: this.state.graphType,
-        sites: this.sites,
-        format: 'json',
-        period: 'PT12H', // past 12 hours
-        siteStatus: 'active',
-      },
-    })
+    const params = new URLSearchParams({
+      parameterCd: this.state.graphType,
+      sites: this.sites,
+      format: 'json',
+      period: 'PT12H', // past 12 hours
+      siteStatus: 'active',
+    });
+
+    fetch(`${this.baseUsgsUrl}?${params}`)
       .then(response => {
+        if (!response.ok) {
+          throw new Error(`USGS request failed (${response.status})`);
+        }
+        return response.json();
+      })
+      .then(data => {
         this.setState({ loading: false });
-        if (response.data.value.timeSeries) {
-          this.displayUsgsData(response.data.value.timeSeries);
+        if (data.value.timeSeries) {
+          this.displayUsgsData(data.value.timeSeries);
           this.scrollIntoView();
           this.setState({ error: false });
         } else {
@@ -205,8 +210,7 @@ class Riverflow extends Component {
       })
       .catch(error => {
         console.log(error);
-        this.setState({ loading: false });
-        this.setState({ error: error.message });
+        this.setState({ loading: false, error: error.message });
       });
   }
 
