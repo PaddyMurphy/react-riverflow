@@ -1,14 +1,34 @@
 @import '../../../src/bulma-styles.sass'
 
 .graph
-  image-rendering: pixelated
-  height: auto
-  max-height: 500px
-  min-width: 300px
   width: 100%
   .has-error &
     display: none
 
+.graph-title
+  color: #4a4a4a
+  font-size: 14px
+  font-weight: 600
+  margin-bottom: 0.5rem
+  text-align: left
+
+.graph-tooltip
+  background: #fff
+  border: 1px solid #dbdbdb
+  border-radius: 4px
+  box-shadow: 0 2px 6px rgba(10, 10, 10, 0.15)
+  display: flex
+  flex-direction: column
+  font-size: 13px
+  line-height: 1.3
+  padding: 0.4rem 0.6rem
+  strong
+    color: #3273dc
+  span
+    color: #7a7a7a
+
+.graph-error
+  color: #7a7a7a
 
 .graph-wrapper
   position: relative
@@ -17,6 +37,9 @@
   align-items: center
   justify-content: center
   height: 100%
+
+.graph-image
+  width: 100%
 
 .graph-loading
   flex: 1

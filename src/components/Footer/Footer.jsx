@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import './Footer.sass';
+import React, { Component } from "react";
+import "./Footer.sass";
 
 class Footer extends Component {
   render() {
@@ -8,17 +8,13 @@ class Footer extends Component {
         <div className="container">
           <div className="content has-text-centered">
             <p>
-              <strong>Riverflow</strong> by{' '}
-              <a href="//www.mountaindrawn.com">Mountaindrawn</a>. The source
-              code is licensed
+              <strong>Riverflow</strong> by <a href="//www.mountaindrawn.com">Mountaindrawn</a>. The
+              source code is licensed
               <a href="http://opensource.org/licenses/mit-license.php"> MIT</a>.
             </p>
             <p>Built with React</p>
             <p>
-              <a
-                className="icon"
-                href="https://github.com/PaddyMurphy/react-riverflow"
-              >
+              <a className="icon" href="https://github.com/PaddyMurphy/react-riverflow">
                 <b className="show-accessible">view on github</b>
                 <svg
                   aria-hidden="true"
