@@ -5,7 +5,7 @@ import Riverflow from "./Riverflow";
 
 beforeEach(() => {
   globalThis.fetch = vi.fn(() =>
-    Promise.resolve({ ok: true, json: () => Promise.resolve({ value: {} }) }),
+    Promise.resolve({ ok: true, json: () => Promise.resolve({ features: [] }) }),
   );
 });
 

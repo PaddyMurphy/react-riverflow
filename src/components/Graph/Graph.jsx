@@ -27,7 +27,7 @@ class Graph extends Component {
   constructor(props) {
     super(props);
 
-    this.baseUsgsUrl = "https://waterservices.usgs.gov/nwis/iv/";
+    this.baseUsgsUrl = "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items";
     this.state = {
       error: false,
       loading: false,
@@ -52,19 +52,28 @@ class Graph extends Component {
   }
 
   /**
-   * Fetches the past 7 days of instantaneous values for the selected site.
-   * The legacy waterdata.usgs.gov/nwisweb/graph image endpoint was
-   * decommissioned by USGS, so we render the chart ourselves from the data.
+   * Fetches the past 7 days of continuous values for the selected site from
+   * the modernized USGS Water Data API (OGC API - Features). The legacy
+   * waterdata.usgs.gov/nwisweb/graph image endpoint was decommissioned by
+   * USGS, so we render the chart ourselves from the data.
    * @param {string} site - USGS site number.
    */
   fetchGraphData(site) {
+    const now = new Date();
+    const start = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // past 7 days
     const params = new URLSearchParams({
-      sites: site,
-      parameterCd: this.props.graphType,
-      period: "P7D",
-      format: "json",
-      siteStatus: "active",
+      monitoring_location_id: `USGS-${site}`,
+      parameter_code: this.props.graphType,
+      datetime: `${start.toISOString()}/${now.toISOString()}`,
+      limit: "5000",
+      f: "json",
     });
+
+    // optional API key raises the anonymous rate limit (50/hr) to 1000/hr
+    const apiKey = import.meta.env.VITE_USGS_API_KEY;
+    if (apiKey) {
+      params.set("api_key", apiKey);
+    }
 
     this.setState({ loading: true, error: false });
 
@@ -77,13 +86,14 @@ class Graph extends Component {
       })
       .then((data) => {
         if (this.cancelled) return;
-        const series = data.value.timeSeries && data.value.timeSeries[0];
-        const noDataValue =
-          series && series.variable ? parseFloat(series.variable.noDataValue) : -999999;
-        const raw = series ? series.values[0].value : [];
-        const points = raw
-          .map((d) => ({ time: new Date(d.dateTime).getTime(), value: parseFloat(d.value) }))
-          .filter((d) => !Number.isNaN(d.value) && d.value !== noDataValue);
+        const features = data.features || [];
+        const points = features
+          .map((f) => ({
+            time: new Date(f.properties.time).getTime(),
+            value: parseFloat(f.properties.value),
+          }))
+          .filter((d) => !Number.isNaN(d.value) && !Number.isNaN(d.time))
+          .sort((a, b) => a.time - b.time);
 
         if (!points.length) {
           this.setState({ loading: false, error: true, points: [] });
@@ -194,7 +204,7 @@ class Graph extends Component {
             <p className="graph-error">
               Graph data is unavailable for this site.{" "}
               <a
-                href={`https://waterdata.usgs.gov/monitoring-location/${this.props.selected}/`}
+                href={`https://waterdata.usgs.gov/monitoring-location/USGS-${this.props.selected}/`}
                 target="_blank"
                 rel="noreferrer"
               >

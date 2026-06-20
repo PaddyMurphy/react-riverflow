@@ -28,10 +28,10 @@ class Riverflow extends Component {
     };
 
     this.baseMapUrl = "//maps.google.com/?q=";
-    this.baseUsgsUrl = "https://waterservices.usgs.gov/nwis/iv/";
+    this.baseUsgsUrl = "https://api.waterdata.usgs.gov/ogcapi/v0/collections/continuous/items";
     this.rivers = Rivers.data;
     this.riversFormatted = [];
-    this.sites = this.formatSites();
+    this.siteIds = this.formatSites();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -158,9 +158,9 @@ class Riverflow extends Component {
     let list = [];
 
     this.rivers.forEach(function (d) {
-      // return only number values
+      // return only number values, formatted as USGS monitoring location ids
       if (d.value.match(/\d+/g)) {
-        list.push(d.value);
+        list.push(`USGS-${d.value}`);
       }
     });
 
@@ -168,20 +168,29 @@ class Riverflow extends Component {
   }
 
   /**
-   * Fetches usgs instant data from rivers.json.
+   * Fetches the past 12 hours of continuous data for every site in
+   * rivers.json from the modernized USGS Water Data API (OGC API - Features).
    * @return {number[]} response
    */
   getUsgsData() {
     this.riversFormatted = [];
     this.setState({ loading: true });
-    // fetch all site numbers in rivers.json
+
+    const now = new Date();
+    const start = new Date(now.getTime() - 12 * 60 * 60 * 1000); // past 12 hours
     const params = new URLSearchParams({
-      parameterCd: this.state.graphType,
-      sites: this.sites,
-      format: "json",
-      period: "PT12H", // past 12 hours
-      siteStatus: "active",
+      monitoring_location_id: this.siteIds,
+      parameter_code: this.state.graphType,
+      datetime: `${start.toISOString()}/${now.toISOString()}`,
+      limit: "10000",
+      f: "json",
     });
+
+    // optional API key raises the anonymous rate limit (50/hr) to 1000/hr
+    const apiKey = import.meta.env.VITE_USGS_API_KEY;
+    if (apiKey) {
+      params.set("api_key", apiKey);
+    }
 
     fetch(`${this.baseUsgsUrl}?${params}`)
       .then((response) => {
@@ -192,8 +201,8 @@ class Riverflow extends Component {
       })
       .then((data) => {
         this.setState({ loading: false });
-        if (data.value.timeSeries) {
-          this.displayUsgsData(data.value.timeSeries);
+        if (data.features && data.features.length) {
+          this.displayUsgsData(data.features);
           this.scrollIntoView();
           this.setState({ error: false });
         } else {
@@ -207,70 +216,73 @@ class Riverflow extends Component {
   }
 
   /**
-   * Formats usgs response for display from rivers.json.
-   * @return {number[]} formatted response
-   * @param {number[]} response - usgs fetch response.
+   * Formats the modernized USGS response (GeoJSON FeatureCollection) for
+   * display. The API returns one feature per observation, so observations are
+   * grouped by monitoring location to derive the oldest / newest values.
+   * @param {Object[]} features - usgs fetch response features.
    */
-  displayUsgsData(response) {
+  displayUsgsData(features) {
     const that = this;
     const today = new Date();
-    let arr;
-    let river = {};
-    let currentValue;
-    let date;
-    let geo;
-    let oldestValue;
-    let newestValue;
-    let percentChanged;
-    let rising;
-    let risingFast;
-    let risingFastThreshold = 130; // percent change
-    let site;
-    let time;
+    const risingFastThreshold = 130; // percent change
 
-    response.forEach(function (d) {
-      // NOTE: some rivers do not support cfs (00060)
-      arr = d.values[0].value;
-      // return on error
-      if (!arr[0]) return;
+    // group observations by monitoring location
+    const groups = new Map();
+    features.forEach((feature) => {
+      const props = feature.properties;
+      if (props.value === null || props.value === undefined) return;
+      const value = parseInt(props.value, 10);
+      if (Number.isNaN(value)) return;
 
-      // oldestValue is the first item
-      oldestValue = parseInt(arr[0].value, 10);
-      // currentValue is the last item
-      currentValue = arr[arr.length - 1];
-      newestValue = parseInt(currentValue.value, 10);
-      // get current date / time
-      date = new Date(currentValue.dateTime);
-      time = date.toLocaleTimeString([], {
+      const id = props.monitoring_location_id;
+      if (!groups.has(id)) {
+        groups.set(id, []);
+      }
+      groups.get(id).push({
+        value,
+        time: new Date(props.time),
+        coordinates: feature.geometry && feature.geometry.coordinates,
+      });
+    });
+
+    groups.forEach((observations, id) => {
+      // sort oldest -> newest by observation time
+      observations.sort((a, b) => a.time - b.time);
+
+      const oldestValue = observations[0].value;
+      const current = observations[observations.length - 1];
+      const newestValue = current.value;
+
+      let date = current.time;
+      const time = date.toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
         hour12: false,
       });
 
-      percentChanged = Math.round((newestValue / oldestValue) * 100);
+      const percentChanged = Math.round((newestValue / oldestValue) * 100);
 
       // only show date if not today
       if (today.toDateString() === date.toDateString()) {
         date = "";
       }
 
-      geo = d.sourceInfo.geoLocation.geogLocation;
-      site = d.sourceInfo.siteCode[0].value;
-      rising = newestValue > oldestValue;
-      risingFast = percentChanged > risingFastThreshold;
+      // geometry coordinates are [longitude, latitude]
+      const coords = current.coordinates;
+      const location = coords ? `${that.baseMapUrl}${coords[1]},+${coords[0]}` : that.baseMapUrl;
 
-      river = {
-        name: d.sourceInfo.siteName,
-        location: that.baseMapUrl + geo.latitude + ",+" + geo.longitude,
-        site: site,
+      const river = {
+        // monitoring_location_id is formatted as "USGS-<site number>"
+        site: id.replace(/^USGS-/, ""),
+        location: location,
         date: date,
         time: time,
         cfs: newestValue,
         oldCfs: oldestValue,
         condition: that.getConditions(newestValue).condition,
         level: that.getConditions(newestValue).level,
-        rising: rising,
-        risingFast: risingFast,
+        rising: newestValue > oldestValue,
+        risingFast: percentChanged > risingFastThreshold,
       };
       // merge additional river data
       that.mergeRiverInfo(river);
@@ -279,14 +291,15 @@ class Riverflow extends Component {
     that.setState({ tableData: this.riversFormatted });
   }
   /**
-   * Merges class from rivers.json to matching response
-   * matches are based on USGS site numbers
+   * Merges the river name and white water class from rivers.json onto the
+   * matching response. Matches are based on USGS site numbers. The modernized
+   * API no longer returns a site name, so the name comes from rivers.json.
    * @param {Object} river
    */
   mergeRiverInfo(river) {
     this.rivers.forEach(function (d) {
-      // add white water class
       if (d.value === river.site) {
+        river.name = d.text;
         river.class = d.class;
       }
     });

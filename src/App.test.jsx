@@ -7,7 +7,7 @@ import App from "./App";
 beforeEach(() => {
   // App -> Riverflow fetches USGS data on mount
   globalThis.fetch = vi.fn(() =>
-    Promise.resolve({ ok: true, json: () => Promise.resolve({ value: {} }) }),
+    Promise.resolve({ ok: true, json: () => Promise.resolve({ features: [] }) }),
   );
 });
 
