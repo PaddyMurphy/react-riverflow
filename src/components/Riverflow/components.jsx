@@ -10,7 +10,7 @@ export const Notification = (props) => {
       <p>
         Riverflow provides the latest <abbr title="cubic feet per second">CFS</abbr> from the USGS
         gauges of floatable rivers and creeks. The color indicates optimal floating conditions with
-        additional inforamtion and a 7 day graph in the details.
+        additional information and a 7 day graph in the details.
       </p>
     </div>
   );
