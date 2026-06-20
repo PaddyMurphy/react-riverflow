@@ -1,31 +1,28 @@
-/// <reference types="vitest/config" />
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig, lazyPlugins } from "vite-plus";
+import react from "@vitejs/plugin-react";
 
 // homepage is served from /react-riverflow on gh-pages
 export default defineConfig({
-    base: '/react-riverflow/',
-    plugins: [react()],
-    // allow JSX inside .js files (legacy CRA convention)
-    esbuild: {
-        loader: 'jsx',
-        include: /src\/.*\.jsx?$/,
-        exclude: [],
-    },
-  optimizeDeps: {
-    esbuildOptions: {
-      loader: { '.js': 'jsx' },
-    },
+  staged: {
+    "*": "vp check --fix",
   },
+  fmt: {},
+  lint: {
+    jsPlugins: [{ name: "vite-plus", specifier: "vite-plus/oxlint-plugin" }],
+    rules: { "vite-plus/prefer-vite-plus-imports": "error" },
+    options: { typeAware: true, typeCheck: true },
+  },
+  base: "/react-riverflow/",
+  plugins: lazyPlugins(() => [react()]),
   css: {
     preprocessorOptions: {
-      sass: { quietDeps: true, silenceDeprecations: ['legacy-js-api'] },
-      scss: { quietDeps: true, silenceDeprecations: ['legacy-js-api'] },
+      sass: { quietDeps: true, silenceDeprecations: ["legacy-js-api"] },
+      scss: { quietDeps: true, silenceDeprecations: ["legacy-js-api"] },
     },
   },
-    test: {
-        globals: true,
-        environment: 'jsdom',
-        setupFiles: './src/test/setup.js',
-    },
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: "./src/test/setup.js",
+  },
 });
