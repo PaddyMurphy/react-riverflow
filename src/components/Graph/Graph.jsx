@@ -65,13 +65,13 @@ class Graph extends Component {
 
     let newImage = new Image();
     newImage.src = url;
-    newImage.onload = function (e) {
+    newImage.onload = function () {
       vm.setState({
         loading: false,
         url: url,
       });
     };
-    newImage.onerror = function (e) {
+    newImage.onerror = function () {
       vm.setState({
         error: true,
         loading: false,

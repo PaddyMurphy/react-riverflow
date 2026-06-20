@@ -1,6 +1,6 @@
 import React from "react";
-import { render } from "@testing-library/react";
 import { beforeEach, it, expect, vi } from "vite-plus/test";
+import { render } from "../../test/render.jsx";
 import Riverflow from "./Riverflow";
 
 beforeEach(() => {

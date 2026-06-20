@@ -1,7 +1,7 @@
 import React from "react";
-import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { it, expect } from "vite-plus/test";
+import { render } from "../../test/render.jsx";
 import Gridrow from "./Gridrow.jsx";
 
 const tableData = {

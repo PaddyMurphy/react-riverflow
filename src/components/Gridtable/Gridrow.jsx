@@ -14,9 +14,6 @@ class Gridrow extends Component {
   constructor(props) {
     super(props);
 
-    this.selectRiver = this.selectRiver.bind(this);
-    this.sortBy = this.sortBy.bind(this);
-
     this.state = {
       selected: undefined,
       sortKey: "name",
@@ -28,14 +25,13 @@ class Gridrow extends Component {
     this.setState({ selected: selected });
   }
 
-  sortBy(key) {
+  sortBy = (key) => {
     this.setState({ sortKey: key }, () => {
       this.sortOrders[key] = this.sortOrders[key] * -1;
     });
-  }
+  };
 
-  // binds this
-  selectRiver(e) {
+  selectRiver = (e) => {
     const target = e.currentTarget;
     const id = target.dataset.selected;
     // set the url
@@ -50,7 +46,7 @@ class Gridrow extends Component {
       // set selected
       this.setState({ selected: target.dataset.selected });
     }
-  }
+  };
 
   render() {
     const data = this.props.tableData;

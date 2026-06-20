@@ -1,7 +1,7 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, it, expect, vi } from "vite-plus/test";
+import { render } from "./test/render.jsx";
 import App from "./App";
 
 beforeEach(() => {
@@ -12,10 +12,11 @@ beforeEach(() => {
 });
 
 it("renders without crashing", () => {
-  render(
+  const { container } = render(
     <MemoryRouter>
       <App />
     </MemoryRouter>,
   );
-  expect(screen.getByRole("heading", { name: "Riverflow" })).toBeInTheDocument();
+  const heading = container.querySelector("h1.title");
+  expect(heading?.textContent).toBe("Riverflow");
 });

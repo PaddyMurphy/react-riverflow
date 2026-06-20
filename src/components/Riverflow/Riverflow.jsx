@@ -57,12 +57,12 @@ class Riverflow extends Component {
     });
   };
 
-  hideNotification(e) {
+  hideNotification = (e) => {
     e.preventDefault();
     e.currentTarget.parentElement.classList.add("is-hidden");
-  }
+  };
 
-  clearSearch = (e) => {
+  clearSearch = () => {
     this.setState({
       searchQuery: "",
     });
@@ -228,7 +228,7 @@ class Riverflow extends Component {
     let site;
     let time;
 
-    response.forEach(function (d, i, a) {
+    response.forEach(function (d) {
       // NOTE: some rivers do not support cfs (00060)
       arr = d.values[0].value;
       // return on error
